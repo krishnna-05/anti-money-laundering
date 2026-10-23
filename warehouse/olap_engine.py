@@ -12,9 +12,31 @@ sys.path.insert(0, os.path.abspath("."))
 from config import DUCKDB_PATH, STRUCTURING_LOW, money_unit
 
 
+def ensure_duckdb(target_path: str = DUCKDB_PATH):
+    if os.path.exists(target_path):
+        return
+    parts_dir = os.path.join(os.path.dirname(target_path), "warehouse_parts")
+    if os.path.exists(parts_dir):
+        import glob, gzip, shutil
+        parts = sorted(glob.glob(os.path.join(parts_dir, "part_*")))
+        if parts:
+            os.makedirs(os.path.dirname(target_path), exist_ok=True)
+            gz_temp = target_path + ".temp.gz"
+            with open(gz_temp, "wb") as out_f:
+                for p in parts:
+                    with open(p, "rb") as in_f:
+                        shutil.copyfileobj(in_f, out_f)
+            with gzip.open(gz_temp, "rb") as gz_in, open(target_path, "wb") as db_out:
+                shutil.copyfileobj(gz_in, db_out)
+            if os.path.exists(gz_temp):
+                os.remove(gz_temp)
+
+
 class AML_OLAP_Engine:
     def __init__(self, db_path: str = DUCKDB_PATH):
         self.db_path = db_path
+        if not os.path.exists(self.db_path):
+            ensure_duckdb(self.db_path)
         self.con = duckdb.connect(self.db_path, read_only=True)
 
     def execute_query(self, query: str, params: list = None) -> pd.DataFrame:
