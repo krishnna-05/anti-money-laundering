@@ -1,0 +1,23 @@
+[theme]
+primaryColor = "#2a78d6"
+font = "sans serif"
+baseRadius = "medium"
+showSidebarBorder = true
+
+[theme.light]
+primaryColor = "#2a78d6"
+backgroundColor = "#fcfcfb"
+secondaryBackgroundColor = "#f3f3f0"
+textColor = "#0b0b0b"
+
+[theme.dark]
+primaryColor = "#3987e5"
+backgroundColor = "#141413"
+secondaryBackgroundColor = "#1f1f1d"
+textColor = "#f0efec"
+
+[client]
+toolbarMode = "minimal"
+
+[browser]
+gatherUsageStats = false

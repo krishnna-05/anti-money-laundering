@@ -1,0 +1,13 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Raw data and local DB copies
+data/raw/
+data/processed/*.duckdb
+data/processed/aml_warehouse.db
+*.mp4
+
+# OS metadata
+.DS_Store
